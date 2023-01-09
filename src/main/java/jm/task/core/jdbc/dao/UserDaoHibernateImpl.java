@@ -12,7 +12,7 @@ import java.util.List;
 
 
 public class UserDaoHibernateImpl implements UserDao {
-    Transaction transaction = null;
+    private static Transaction transaction = null;
 
     public UserDaoHibernateImpl() {
 
@@ -57,8 +57,8 @@ public class UserDaoHibernateImpl implements UserDao {
     public void removeUserById(long id) {
         try (Session session = Util.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query<User> query = session.createQuery("DELETE User WHERE id = :name").setParameter("name", id);
-            query.executeUpdate();
+            User user=session.get(User.class,id);
+            session.delete(user);
             transaction.commit();
         }
     }
